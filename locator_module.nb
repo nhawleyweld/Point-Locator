@@ -1,0 +1,986 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     43930,        977]
+NotebookOptionsPosition[     43603,        961]
+NotebookOutlinePosition[     43950,        976]
+CellTagsIndexPosition[     43907,        973]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"This", " ", "module", " ", "loads", " ", "an", " ", "image"}], 
+    ",", " ", 
+    RowBox[{
+     RowBox[{
+     "then", " ", "allows", " ", "you", " ", "to", " ", "find", " ", "the", 
+      " ", "coordinates", " ", "of", " ", "an", " ", "arbitrary", " ", 
+      "number", " ", "of", " ", "points", " ", "in", " ", "the", " ", "image",
+       " ", "by", " ", "using", " ", "draggable", " ", 
+      RowBox[{"locators", ".", " ", "The"}], " ", "user", " ", "must", " ", 
+      "input", " ", "the", " ", "following", " ", "parameters", " ", "into", 
+      " ", "the", " ", "main", " ", 
+      RowBox[{"module", ":"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"graph", ":", "   ", 
+       RowBox[{"(", 
+        RowBox[{"File", " ", "Name"}], ")"}]}], "       ", "=", " ", 
+      RowBox[{
+      "location", " ", "of", " ", "the", " ", "image", " ", "file", " ", "to",
+        " ", "load", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"note", " ", "the", " ", "syntax"}], " ", "-", " ", 
+         RowBox[{
+         "to", " ", "use", " ", "the", " ", "test", " ", "file", " ", "use", 
+          " ", 
+          RowBox[{"fig6", ".", "png"}]}]}], ")"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"logx", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"True", "/", "False"}], ")"}]}], "      ", "=", " ", 
+      RowBox[{
+       RowBox[{
+       "whether", " ", "or", " ", "not", " ", "to", " ", "use", " ", "a", " ",
+         "log", " ", "scale", " ", "on", " ", "the", " ", "x"}], "-", 
+       "axis"}]}], ";", "  ", 
+     RowBox[{
+      RowBox[{"logy", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"True", "/", "False"}], ")"}]}], "      ", "=", " ", 
+      RowBox[{
+       RowBox[{
+       "whether", " ", "or", " ", "not", " ", "to", " ", "use", " ", "a", " ",
+         "log", " ", "scale", " ", "on", " ", "the", " ", "y"}], "-", 
+       "axis"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"xmin", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+       RowBox[{"minimum", " ", "value", " ", "that", " ", "the", " ", "x"}], 
+       "-", 
+       RowBox[{"axis", " ", "reaches"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"xmax", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+       RowBox[{"maximum", " ", "value", " ", "that", " ", "the", " ", "x"}], 
+       "-", 
+       RowBox[{"axis", " ", "reaches"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ymin", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+       RowBox[{"minimum", " ", "value", " ", "that", " ", "the", " ", "y"}], 
+       "-", 
+       RowBox[{"axis", " ", "reaches"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ymax", ":", "    ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+       RowBox[{"maximum", " ", "value", " ", "that", " ", "the", " ", "y"}], 
+       "-", 
+       RowBox[{"axis", " ", "reaches"}]}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"px", ":", "      ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+      "x", " ", "coordinate", " ", "to", " ", "create", " ", "new", " ", 
+       "points"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"py", ":", "      ", 
+       RowBox[{"(", 
+        RowBox[{"Real", " ", "number"}], ")"}]}], "     ", "=", " ", 
+      RowBox[{
+      "y", " ", "coordinate", " ", "to", " ", "create", " ", "new", " ", 
+       "points"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{"To", " ", "use", " ", "this", " ", "module"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "first", " ", "load", " ", "the", " ", "image", " ", "and", " ", "then", 
+      " ", "drag", " ", "the", " ", "manipulator", " ", "sliders", " ", 
+      "given", " ", 
+      RowBox[{"below", ":"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"frame", " ", 
+       RowBox[{"size", ":"}]}], "                 ", "=", " ", 
+      RowBox[{
+      "width", " ", "of", " ", "whole", " ", "frame", " ", "in", " ", 
+       "pixels"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"point", " ", "locator", " ", 
+       RowBox[{"size", ":"}]}], "         ", "=", " ", 
+      RowBox[{"size", " ", "of", " ", "draggable", " ", "circles"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"width", ":"}], "                      ", "=", " ", 
+      RowBox[{"width", " ", "of", " ", "the", " ", "image", " ", 
+       RowBox[{"(", 
+        RowBox[{
+        "resize", " ", "so", " ", "that", " ", "axes", " ", "correspond", " ",
+          "with", " ", "frame", " ", "axes"}], ")"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"aspect", " ", 
+       RowBox[{"ratio", ":"}]}], "               ", "=", " ", 
+      RowBox[{
+      "aspect", " ", "ratio", " ", "of", " ", "image", " ", "given", " ", 
+       "as", " ", "a", " ", "fraction", " ", "of", " ", 
+       RowBox[{"height", "/", "width"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+        "resize", " ", "so", " ", "that", " ", "axes", " ", "correspond", " ",
+          "with", " ", "frame", " ", "axes"}], ")"}]}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"x", " ", 
+       RowBox[{"position", ":"}]}], "                 ", "=", " ", 
+      RowBox[{
+      "x", " ", "coordinate", " ", "on", " ", "the", " ", "frame", " ", 
+       "where", " ", "the", " ", "bottom", " ", "left", " ", "corner", " ", 
+       "of", " ", "the", " ", "image", " ", "is", " ", "placed"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"y", " ", 
+       RowBox[{"position", ":"}]}], "                 ", "=", " ", 
+      RowBox[{
+      "y", " ", "coordinate", " ", "on", " ", "the", " ", "frame", " ", 
+       "where", " ", "the", " ", "bottom", " ", "left", " ", "corner", " ", 
+       "of", " ", "the", " ", "image", " ", "is", " ", "placed"}]}], ";", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+     "For", " ", "the", " ", "example", " ", "file", " ", "given", " ", 
+      RowBox[{"(", 
+       RowBox[{"fig6", ".", "png"}], ")"}]}]}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "use", " ", "the", " ", "following", " ", "values", " ", "on", " ", 
+      "the", " ", "sliders", " ", "to", " ", "align", " ", "the", " ", 
+      "image", " ", "with", " ", "the", " ", 
+      RowBox[{"frame", ":"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"width", " ", "=", " ", "12.65"}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"aspect", " ", "ratio"}], " ", "=", " ", "0.57"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"x", " ", "pos"}], " ", "=", " ", 
+      RowBox[{"-", "1.73"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"y", " ", "pos"}], " ", "=", " ", 
+      RowBox[{"-", "8.02"}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", "Then"}], ",", " ", 
+    RowBox[{
+    "after", " ", "aligning", " ", "the", " ", "image", " ", "with", " ", 
+     "the", " ", "frame"}], ",", " ", 
+    RowBox[{
+    "click", " ", "\"\<Add point\>\"", " ", "to", " ", "create", " ", "a", 
+     " ", "new", " ", "draggable", " ", "point", " ", 
+     RowBox[{"locator", ".", " ", "Drag"}], " ", "the", " ", "point", " ", 
+     "with", " ", "the", " ", "mouse", " ", "to", " ", "the", " ", "desired", 
+     " ", "location"}], ",", 
+    RowBox[{
+    "which", " ", "will", " ", "be", " ", "stored", " ", "in", " ", "a", " ", 
+     "list", " ", "and", " ", "can", " ", "be", " ", "retrieved", " ", "at", 
+     " ", "the", " ", 
+     RowBox[{"end", ".", " ", "Continue"}], " ", "adding", " ", "points", " ",
+      "until", " ", 
+     RowBox[{"satisfied", ".", " ", "To"}], " ", "start", " ", "over"}], ",", 
+    " ", 
+    RowBox[{
+     RowBox[{
+     "click", " ", "\"\<Clear points\>\"", " ", "and", " ", "all", " ", "the",
+       " ", "points", " ", "will", " ", "be", " ", 
+      RowBox[{"deleted", ".", " ", "Unfortunately"}], " ", "in", " ", "this", 
+      " ", "version", " ", "points", " ", "cannot", " ", "be", " ", "deleted",
+       " ", "one", " ", "at", " ", "a", " ", 
+      RowBox[{"time", "."}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", "Finally"}], ",", " ", 
+    RowBox[{
+    "click", " ", "\"\<Save point coordinates\>\"", " ", "and", " ", "a", " ",
+      "dialog", " ", "window", " ", "will", " ", "pop", " ", "up", " ", 
+     "containing", " ", "an", " ", "ordered", " ", "list", " ", "of", " ", 
+     RowBox[{"(", "1", ")"}], " ", "x", " ", "coordinates", " ", "only"}], 
+    ",", " ", 
+    RowBox[{
+     RowBox[{"(", "2", ")"}], " ", "y", " ", "coordinates", " ", "only"}], 
+    ",", " ", 
+    RowBox[{"and", " ", 
+     RowBox[{"(", "3", ")"}], " ", "both", " ", "x", " ", "and", " ", "y", 
+     " ", "coordinates", " ", "as", " ", "a", " ", "list", " ", "of", " ", 
+     RowBox[{"tuples", "."}]}]}], "\[IndentingNewLine]", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"csort", "[", "ls_", "]"}], ":=", 
+     RowBox[{"Sort", "[", 
+      RowBox[{"ls", ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"#1", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "<", 
+         RowBox[{"#2", "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}], "&"}]}], "]"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{
+    "This", " ", "function", " ", "sorts", " ", "a", " ", "list", " ", "of", 
+     " ", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "y"}], "}"}], " ", "coordinates", " ", "by", " ", 
+     "sorting", " ", "the", " ", "x", " ", "coordinates", " ", "in", " ", 
+     "increasing", " ", 
+     RowBox[{"order", "."}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "xmin", ",", "xmax", ",", "ymin", ",", "ymax", ",", "px", ",", "py", 
+       ",", "pt", ",", "logx", ",", "logy", ",", "graph", ",", "grabfirst", 
+       ",", "grabsecond", ",", "exp", ",", "orderedpts"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"graph", "=", 
+       RowBox[{"Import", "[", 
+        RowBox[{"FileNameJoin", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+           "\"\<example.png\>\""}], "}"}], "]"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"logx", "=", "False"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"logy", "=", "True"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"xmin", "=", "0"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"xmax", "=", "10"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ymin", "=", 
+       RowBox[{"10", "^", 
+        RowBox[{"(", 
+         RowBox[{"-", "3"}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ymax", "=", 
+       RowBox[{"10", "^", 
+        RowBox[{"(", "1", ")"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"px", "=", "1"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"py", "=", "1"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Switch", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"logx", ",", "logy"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"False", ",", "False"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Plot", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", 
+            RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+            RowBox[{"PlotRange", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"xmin", ",", "xmax"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ymin", ",", "ymax"}], "}"}]}], "}"}]}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "isize"}], ",", 
+            RowBox[{"Prolog", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"Inset", "[", 
+               RowBox[{
+                RowBox[{"ImageResize", "[", 
+                 RowBox[{"graph", ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}], 
+                    ",", 
+                    RowBox[{"ar", " ", 
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}]}]}],
+                    "}"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"xp", ",", "yp"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"width", ",", "Automatic"}], "}"}]}], "]"}], 
+              "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"False", ",", "True"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"LogPlot", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", 
+            RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+            RowBox[{"PlotRange", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"xmin", ",", "xmax"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ymin", ",", "ymax"}], "}"}]}], "}"}]}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "isize"}], ",", 
+            RowBox[{"Prolog", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"Inset", "[", 
+               RowBox[{
+                RowBox[{"ImageResize", "[", 
+                 RowBox[{"graph", ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}], 
+                    ",", 
+                    RowBox[{"ar", " ", 
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}]}]}],
+                    "}"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"xp", ",", "yp"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"width", ",", "Automatic"}], "}"}]}], "]"}], 
+              "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"True", ",", "False"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"LogLinearPlot", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", 
+            RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+            RowBox[{"PlotRange", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"xmin", ",", "xmax"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ymin", ",", "ymax"}], "}"}]}], "}"}]}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "isize"}], ",", 
+            RowBox[{"Prolog", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"Inset", "[", 
+               RowBox[{
+                RowBox[{"ImageResize", "[", 
+                 RowBox[{"graph", ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}], 
+                    ",", 
+                    RowBox[{"ar", " ", 
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}]}]}],
+                    "}"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"xp", ",", "yp"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"width", ",", "Automatic"}], "}"}]}], "]"}], 
+              "}"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"True", ",", "True"}], "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"LogLogPlot", "[", 
+           RowBox[{"0", ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "xmin", ",", "xmax"}], "}"}], ",", 
+            RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+            RowBox[{"PlotRange", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"xmin", ",", "xmax"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ymin", ",", "ymax"}], "}"}]}], "}"}]}], ",", 
+            RowBox[{"ImageSize", "\[Rule]", "isize"}], ",", 
+            RowBox[{"Prolog", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"Inset", "[", 
+               RowBox[{
+                RowBox[{"ImageResize", "[", 
+                 RowBox[{"graph", ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}], 
+                    ",", 
+                    RowBox[{"ar", " ", 
+                    RowBox[{"First", "[", 
+                    RowBox[{"ImageDimensions", "[", "graph", "]"}], "]"}]}]}],
+                    "}"}]}], "]"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"xp", ",", "yp"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"width", ",", "Automatic"}], "}"}]}], "]"}], 
+              "}"}]}]}], "]"}]}], "\[IndentingNewLine]", "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"pts", ",", 
+            RowBox[{"{", "}"}]}], "}"}], ",", "Locator", ",", 
+          RowBox[{"Appearance", "\[Rule]", 
+           RowBox[{"Graphics", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"Red", ",", 
+               RowBox[{"Circle", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"0", ",", "0"}], "}"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"1", ",", "1"}], "}"}]}], "]"}]}], "}"}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "psize"}]}], "]"}]}]}], "}"}], 
+        ",", "\[IndentingNewLine]", 
+        RowBox[{"Row", "[", 
+         RowBox[{
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{"Column", "[", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"isize", ",", "700", ",", "\"\<frame size\>\""}], 
+                  "}"}], ",", "0", ",", "1200", ",", "1"}], "}"}], "]"}], ",",
+               "\[IndentingNewLine]", 
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                  "psize", ",", "15", ",", "\"\<point locator size\>\""}], 
+                  "}"}], ",", "1", ",", "40", ",", "1"}], "}"}], "]"}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"width", ",", "12.65", 
+                   RowBox[{"(*", 
+                    RowBox[{"(", 
+                    RowBox[{"xmax", "-", "xmin"}], ")"}], "*)"}], ",", 
+                   "\"\<width\>\""}], "}"}], ",", "0", ",", "20", ",", 
+                 "0.001"}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"ar", ",", "0.57", 
+                   RowBox[{"(*", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"ymax", "-", "ymin"}], ")"}], "/", 
+                    RowBox[{"(", 
+                    RowBox[{"xmax", "-", "xmin"}], ")"}]}], "*)"}], ",", 
+                   "\"\<aspect ratio h:w\>\""}], "}"}], ",", "0", ",", "20", 
+                 ",", "0.001"}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"xp", ",", 
+                   RowBox[{"-", "1.73"}], 
+                   RowBox[{"(*", "0", "*)"}], ",", "\"\<x position\>\""}], 
+                  "}"}], ",", 
+                 RowBox[{"-", 
+                  RowBox[{"Max", "[", 
+                   RowBox[{
+                    RowBox[{"Abs", "[", "xmin", "]"}], ",", 
+                    RowBox[{"Abs", "[", "xmax", "]"}]}], "]"}]}], ",", 
+                 RowBox[{"Max", "[", 
+                  RowBox[{
+                   RowBox[{"Abs", "[", "xmin", "]"}], ",", 
+                   RowBox[{"Abs", "[", "xmax", "]"}]}], "]"}], ",", "0.001"}],
+                 "}"}], "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"Control", "[", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"yp", ",", 
+                   RowBox[{"-", "8.02"}], 
+                   RowBox[{"(*", "0", "*)"}], ",", "\"\<y position\>\""}], 
+                  "}"}], ",", 
+                 RowBox[{"-", 
+                  RowBox[{"Max", "[", 
+                   RowBox[{
+                    RowBox[{"Abs", "[", "ymin", "]"}], ",", 
+                    RowBox[{"Abs", "[", "ymax", "]"}]}], "]"}]}], ",", 
+                 RowBox[{"Max", "[", 
+                  RowBox[{
+                   RowBox[{"Abs", "[", "ymin", "]"}], ",", 
+                   RowBox[{"Abs", "[", "ymax", "]"}]}], "]"}], ",", "0.001"}],
+                 "}"}], "]"}]}], "\[IndentingNewLine]", "}"}], "]"}], "}"}], 
+          "\[IndentingNewLine]", 
+          RowBox[{"Spacer", "[", "100", "]"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Row", "[", 
+         RowBox[{
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Button", "[", 
+             RowBox[{"\"\<Add point\>\"", ",", 
+              RowBox[{"pts", "=", 
+               RowBox[{"pts", "~", "Join", "~", 
+                RowBox[{"{", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"logx", "\[Equal]", "True"}], ",", 
+                    RowBox[{"Log", "[", "px", "]"}], ",", "px"}], "]"}], ",", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"logy", "\[Equal]", "True"}], ",", 
+                    RowBox[{"Log", "[", "py", "]"}], ",", "py"}], "]"}]}], 
+                  "}"}], "}"}]}]}], ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Button", "[", 
+             RowBox[{"\"\<Clear all points\>\"", ",", 
+              RowBox[{"pts", "=", 
+               RowBox[{"{", "}"}]}], ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Button", "[", 
+             RowBox[{
+             "\"\<Save point coordinates\>\"", ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"grabfirst", "[", "a_", "]"}], ":=", 
+                RowBox[{"a", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"grabsecond", "[", "a_", "]"}], ":=", 
+                RowBox[{"a", "[", 
+                 RowBox[{"[", "2", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"exp", "[", "a_", "]"}], ":=", 
+                RowBox[{"Switch", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"logx", ",", "logy"}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{"False", ",", "False"}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ",", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{"False", ",", "True"}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ",", 
+                    RowBox[{"Exp", "[", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{"True", ",", "False"}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"Exp", "[", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}]}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{"True", ",", "True"}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"Exp", "[", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", 
+                    RowBox[{"Exp", "[", 
+                    RowBox[{"a", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}]}], 
+                 "\[IndentingNewLine]", "]"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{"orderedpts", "=", 
+                RowBox[{"csort", "[", 
+                 RowBox[{"Map", "[", 
+                  RowBox[{"exp", ",", "pts"}], "]"}], "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"CreateWindow", "[", 
+                RowBox[{"DialogNotebook", "[", 
+                 RowBox[{"{", 
+                  RowBox[{"\"\<X coordinates:\>\"", ",", 
+                   RowBox[{"InputField", "[", 
+                    RowBox[{"Map", "[", 
+                    RowBox[{"grabfirst", ",", "orderedpts"}], "]"}], "]"}], 
+                   ",", "\"\<Y coordinates:\>\"", ",", 
+                   RowBox[{"InputField", "[", 
+                    RowBox[{"Map", "[", 
+                    RowBox[{"grabsecond", ",", "orderedpts"}], "]"}], "]"}], 
+                   ",", "\"\<Combined List:\>\"", ",", 
+                   RowBox[{"InputField", "[", "orderedpts", "]"}]}], "}"}], 
+                 "]"}], "]"}]}], ",", 
+              RowBox[{"ImageSize", "\[Rule]", "Large"}]}], 
+             "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"Dynamic", "@", 
+             RowBox[{"StringJoin", "[", 
+              RowBox[{
+               RowBox[{"ToString", "[", 
+                RowBox[{"Length", "[", "pts", "]"}], "]"}], ",", 
+               "\"\< Points total\>\""}], "]"}]}]}], "\[IndentingNewLine]", 
+           "}"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Spacer", "[", "10", "]"}]}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}]}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6048424181526504`*^9, 3.604842418304741*^9}, {
+   3.6048424885265875`*^9, 3.604842602918784*^9}, {3.604842643402539*^9, 
+   3.6048426455120363`*^9}, {3.6048428107855206`*^9, 3.60484287126746*^9}, {
+   3.6048429612023087`*^9, 3.6048429735170383`*^9}, {3.6048430082987213`*^9, 
+   3.604843056647046*^9}, {3.6048493908358965`*^9, 3.604849433658299*^9}, {
+   3.6048495255265055`*^9, 3.6048495257777004`*^9}, {3.604849661068716*^9, 
+   3.6048497085544233`*^9}, {3.6048497634373817`*^9, 3.604849763692562*^9}, {
+   3.604849855193224*^9, 3.604849895996187*^9}, {3.604849932923399*^9, 
+   3.6048499468192673`*^9}, {3.6048499791362023`*^9, 
+   3.6048500134505596`*^9}, {3.6048500530847588`*^9, 3.604850113234453*^9}, {
+   3.6048502450200157`*^9, 3.6048502766724834`*^9}, {3.604850403167067*^9, 
+   3.6048505358682747`*^9}, {3.6048506577843704`*^9, 
+   3.6048506611577654`*^9}, {3.6048507768657556`*^9, 
+   3.6048508126821856`*^9}, {3.6048508511624956`*^9, 
+   3.6048508518960223`*^9}, {3.604850885903161*^9, 3.6048509210330896`*^9}, {
+   3.604850952077139*^9, 3.6048510580143237`*^9}, {3.6048513918346825`*^9, 
+   3.6048516821607714`*^9}, {3.6048519748668175`*^9, 
+   3.6048520979701157`*^9}, {3.6048521292463164`*^9, 3.60485213052324*^9}, {
+   3.604852286392864*^9, 3.6048523601932497`*^9}, {3.604852397970064*^9, 
+   3.6048524706606617`*^9}, {3.6048525746094475`*^9, 
+   3.6048526043405523`*^9}, {3.6048526398017406`*^9, 3.604852692754318*^9}, {
+   3.604852919180271*^9, 3.6048529213958387`*^9}, {3.604852951880498*^9, 
+   3.6048529596629963`*^9}, {3.604853020187951*^9, 3.604853094110425*^9}, {
+   3.6048532390650673`*^9, 3.604853254178776*^9}, {3.6048540670599165`*^9, 
+   3.60485406733211*^9}, {3.604854106578968*^9, 3.6048541068891954`*^9}, {
+   3.604854686893243*^9, 3.604854689822313*^9}, {3.6048547296025567`*^9, 
+   3.6048547937290745`*^9}, {3.6048550606291547`*^9, 3.604855142065982*^9}, {
+   3.604859276696419*^9, 3.6048593494220495`*^9}, {3.604859391670024*^9, 
+   3.6048594447957325`*^9}, {3.60485947594284*^9, 3.6048594766053114`*^9}, {
+   3.6048595159052143`*^9, 3.604859570686125*^9}, {3.6048596073831415`*^9, 
+   3.6048596554722853`*^9}, {3.604859694497978*^9, 3.6048597031941795`*^9}, {
+   3.60485976305164*^9, 3.6048597664410524`*^9}, {3.6048599016228046`*^9, 
+   3.604860065263945*^9}, {3.6048601329149656`*^9, 3.6048601793059025`*^9}, {
+   3.604860245253735*^9, 3.6048602620826516`*^9}, {3.6048603387520833`*^9, 
+   3.6048603486831317`*^9}, {3.6048603861677303`*^9, 3.604860455839215*^9}, {
+   3.6048605047579193`*^9, 3.6048605050661573`*^9}, {3.6048607131391015`*^9, 
+   3.6048607694921017`*^9}, {3.6048608210417004`*^9, 
+   3.6048609262403793`*^9}, {3.604860967845897*^9, 3.6048613893040905`*^9}, {
+   3.6048614407605877`*^9, 3.6048616344610815`*^9}, {3.604861725860965*^9, 
+   3.604862105826699*^9}, {3.604862178295139*^9, 3.604862179284813*^9}, {
+   3.6048622137242594`*^9, 3.604862246853777*^9}, {3.6048622808989496`*^9, 
+   3.604862292471156*^9}, {3.604863836867116*^9, 3.604863848408306*^9}, {
+   3.604864159004778*^9, 3.604864160229637*^9}, 3.604926916573449*^9, {
+   3.635184777365024*^9, 3.6351847888792095`*^9}, {3.635184840765749*^9, 
+   3.635184871055236*^9}, {3.6356164014057283`*^9, 3.6356164599377317`*^9}, {
+   3.6356172659055977`*^9, 3.6356172671016784`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`ar$$ = 0.57, $CellContext`isize$$ = 
+    700, $CellContext`psize$$ = 15, $CellContext`pts$$ = {{
+    2.6, -1.3600000000000003`}, {1.305, -2.0100000000000007`}, {2.6, 
+    0.6200000000000001}, {3.13, -2.24}}, $CellContext`width$$ = 
+    12.65, $CellContext`xp$$ = -1.73, $CellContext`yp$$ = -8.02, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`pts$$], {}}, Automatic}, {{
+       Hold[$CellContext`isize$$], 700, "frame size"}, 0, 1200, 1}, {{
+       Hold[$CellContext`psize$$], 15, "point locator size"}, 1, 40, 1}, {{
+       Hold[$CellContext`width$$], 12.65, "width"}, 0, 20, 0.001}, {{
+       Hold[$CellContext`ar$$], 0.57, "aspect ratio h:w"}, 0, 20, 0.001}, {{
+       Hold[$CellContext`xp$$], -1.73, "x position"}, -10, 10, 0.001}, {{
+       Hold[$CellContext`yp$$], -8.02, "y position"}, -10, 10, 0.001}, {
+      Hold[
+       Row[{Column[{
+            Manipulate`Place[1], 
+            Manipulate`Place[2], 
+            Manipulate`Place[3], 
+            Manipulate`Place[4], 
+            Manipulate`Place[5], 
+            Manipulate`Place[6]}] Spacer[100]}]], 
+      Manipulate`Dump`ThisIsNotAControl}, {
+      Hold[
+       Row[{
+         Button["Add point", $CellContext`pts$$ = Join[$CellContext`pts$$, {{
+              If[$CellContext`logx$4786 == True, 
+               Log[$CellContext`px$4786], $CellContext`px$4786], 
+              If[$CellContext`logy$4786 == True, 
+               Log[$CellContext`py$4786], $CellContext`py$4786]}}], ImageSize -> 
+          Large], 
+         Button[
+         "Clear all points", $CellContext`pts$$ = {}, ImageSize -> Large], 
+         Button["Save point coordinates", $CellContext`grabfirst$4786[
+             Pattern[$CellContext`a, 
+              Blank[]]] := 
+           Part[$CellContext`a, 1]; $CellContext`grabsecond$4786[
+             Pattern[$CellContext`a, 
+              Blank[]]] := Part[$CellContext`a, 2]; $CellContext`exp$4786[
+             Pattern[$CellContext`a$, 
+              Blank[]]] := 
+           Switch[{$CellContext`logx$4786, $CellContext`logy$4786}, {
+             False, False}, {
+              Part[$CellContext`a$, 1], 
+              Part[$CellContext`a$, 2]}, {False, True}, {
+              Part[$CellContext`a$, 1], 
+              Exp[
+               Part[$CellContext`a$, 2]]}, {True, False}, {
+              Exp[
+               Part[$CellContext`a$, 1]], 
+              Part[$CellContext`a$, 2]}, {True, True}, {
+              Exp[
+               Part[$CellContext`a$, 1]], 
+              Exp[
+               
+               Part[$CellContext`a$, 
+                2]]}]; $CellContext`orderedpts$4786 = $CellContext`csort[
+             Map[$CellContext`exp$4786, $CellContext`pts$$]]; CreateWindow[
+            DialogNotebook[{"X coordinates:", 
+              InputField[
+               
+               Map[$CellContext`grabfirst$4786, \
+$CellContext`orderedpts$4786]], "Y coordinates:", 
+              InputField[
+               
+               Map[$CellContext`grabsecond$4786, \
+$CellContext`orderedpts$4786]], "Combined List:", 
+              InputField[$CellContext`orderedpts$4786]}]], ImageSize -> 
+          Large], 
+         Dynamic[
+          StringJoin[
+           ToString[
+            Length[$CellContext`pts$$]], " Points total"]]}, 
+        Spacer[10]]], Manipulate`Dump`ThisIsNotAControl}}, Typeset`size$$ = {
+    1170.5, {244., 12.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`isize$4846$$ = 
+    0, $CellContext`psize$4847$$ = 0, $CellContext`width$4848$$ = 
+    0, $CellContext`ar$4849$$ = 0, $CellContext`xp$4850$$ = 
+    0, $CellContext`yp$4851$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     2, StandardForm, 
+      "Variables" :> {$CellContext`ar$$ = 0.57, $CellContext`isize$$ = 
+        700, $CellContext`psize$$ = 
+        15, $CellContext`pts$$ = {}, $CellContext`width$$ = 
+        12.65, $CellContext`xp$$ = -1.73, $CellContext`yp$$ = -8.02}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`isize$$, $CellContext`isize$4846$$, 0], 
+        Hold[$CellContext`psize$$, $CellContext`psize$4847$$, 0], 
+        Hold[$CellContext`width$$, $CellContext`width$4848$$, 0], 
+        Hold[$CellContext`ar$$, $CellContext`ar$4849$$, 0], 
+        Hold[$CellContext`xp$$, $CellContext`xp$4850$$, 0], 
+        Hold[$CellContext`yp$$, $CellContext`yp$4851$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Switch[{$CellContext`logx$4786, $CellContext`logy$4786}, {False, False}, 
+        Plot[
+        0, {$CellContext`x, $CellContext`xmin$4786, $CellContext`xmax$4786}, 
+         Frame -> True, 
+         PlotRange -> {{$CellContext`xmin$4786, $CellContext`xmax$4786}, \
+{$CellContext`ymin$4786, $CellContext`ymax$4786}}, 
+         ImageSize -> $CellContext`isize$$, Prolog -> {
+           Inset[
+            ImageResize[$CellContext`graph$4786, {
+              First[
+               ImageDimensions[$CellContext`graph$4786]], $CellContext`ar$$ 
+              First[
+                
+                ImageDimensions[$CellContext`graph$4786]]}], \
+{$CellContext`xp$$, $CellContext`yp$$}, {0, 
+            0}, {$CellContext`width$$, Automatic}]}], {False, True}, 
+        LogPlot[
+        0, {$CellContext`x, $CellContext`xmin$4786, $CellContext`xmax$4786}, 
+         Frame -> True, 
+         PlotRange -> {{$CellContext`xmin$4786, $CellContext`xmax$4786}, \
+{$CellContext`ymin$4786, $CellContext`ymax$4786}}, 
+         ImageSize -> $CellContext`isize$$, Prolog -> {
+           Inset[
+            ImageResize[$CellContext`graph$4786, {
+              First[
+               ImageDimensions[$CellContext`graph$4786]], $CellContext`ar$$ 
+              First[
+                
+                ImageDimensions[$CellContext`graph$4786]]}], \
+{$CellContext`xp$$, $CellContext`yp$$}, {0, 
+            0}, {$CellContext`width$$, Automatic}]}], {True, False}, 
+        LogLinearPlot[
+        0, {$CellContext`x, $CellContext`xmin$4786, $CellContext`xmax$4786}, 
+         Frame -> True, 
+         PlotRange -> {{$CellContext`xmin$4786, $CellContext`xmax$4786}, \
+{$CellContext`ymin$4786, $CellContext`ymax$4786}}, 
+         ImageSize -> $CellContext`isize$$, Prolog -> {
+           Inset[
+            ImageResize[$CellContext`graph$4786, {
+              First[
+               ImageDimensions[$CellContext`graph$4786]], $CellContext`ar$$ 
+              First[
+                
+                ImageDimensions[$CellContext`graph$4786]]}], \
+{$CellContext`xp$$, $CellContext`yp$$}, {0, 
+            0}, {$CellContext`width$$, Automatic}]}], {True, True}, 
+        LogLogPlot[
+        0, {$CellContext`x, $CellContext`xmin$4786, $CellContext`xmax$4786}, 
+         Frame -> True, 
+         PlotRange -> {{$CellContext`xmin$4786, $CellContext`xmax$4786}, \
+{$CellContext`ymin$4786, $CellContext`ymax$4786}}, 
+         ImageSize -> $CellContext`isize$$, Prolog -> {
+           Inset[
+            ImageResize[$CellContext`graph$4786, {
+              First[
+               ImageDimensions[$CellContext`graph$4786]], $CellContext`ar$$ 
+              First[
+                
+                ImageDimensions[$CellContext`graph$4786]]}], \
+{$CellContext`xp$$, $CellContext`yp$$}, {0, 
+            0}, {$CellContext`width$$, Automatic}]}]], 
+      "Specifications" :> {{{$CellContext`pts$$, {}}, Automatic, ControlType -> 
+         Locator, Appearance -> Dynamic[
+           Graphics[{Red, 
+             Circle[{0, 0}, {1, 1}]}, 
+            ImageSize -> $CellContext`psize$$]]}, {{$CellContext`isize$$, 700,
+           "frame size"}, 0, 1200, 1, ControlPlacement -> 
+         1}, {{$CellContext`psize$$, 15, "point locator size"}, 1, 40, 1, 
+         ControlPlacement -> 2}, {{$CellContext`width$$, 12.65, "width"}, 0, 
+         20, 0.001, ControlPlacement -> 
+         3}, {{$CellContext`ar$$, 0.57, "aspect ratio h:w"}, 0, 20, 0.001, 
+         ControlPlacement -> 
+         4}, {{$CellContext`xp$$, -1.73, "x position"}, -10, 10, 0.001, 
+         ControlPlacement -> 
+         5}, {{$CellContext`yp$$, -8.02, "y position"}, -10, 10, 0.001, 
+         ControlPlacement -> 6}, 
+        Row[{Column[{
+             Manipulate`Place[1], 
+             Manipulate`Place[2], 
+             Manipulate`Place[3], 
+             Manipulate`Place[4], 
+             Manipulate`Place[5], 
+             Manipulate`Place[6]}] Spacer[100]}], 
+        Row[{
+          Button["Add point", $CellContext`pts$$ = Join[$CellContext`pts$$, {{
+               If[$CellContext`logx$4786 == True, 
+                Log[$CellContext`px$4786], $CellContext`px$4786], 
+               If[$CellContext`logy$4786 == True, 
+                Log[$CellContext`py$4786], $CellContext`py$4786]}}], 
+           ImageSize -> Large], 
+          Button[
+          "Clear all points", $CellContext`pts$$ = {}, ImageSize -> Large], 
+          Button["Save point coordinates", $CellContext`grabfirst$4786[
+              Pattern[$CellContext`a, 
+               Blank[]]] := 
+            Part[$CellContext`a, 1]; $CellContext`grabsecond$4786[
+              Pattern[$CellContext`a, 
+               Blank[]]] := Part[$CellContext`a, 2]; $CellContext`exp$4786[
+              Pattern[$CellContext`a$, 
+               Blank[]]] := 
+            Switch[{$CellContext`logx$4786, $CellContext`logy$4786}, {
+              False, False}, {
+               Part[$CellContext`a$, 1], 
+               Part[$CellContext`a$, 2]}, {False, True}, {
+               Part[$CellContext`a$, 1], 
+               Exp[
+                Part[$CellContext`a$, 2]]}, {True, False}, {
+               Exp[
+                Part[$CellContext`a$, 1]], 
+               Part[$CellContext`a$, 2]}, {True, True}, {
+               Exp[
+                Part[$CellContext`a$, 1]], 
+               Exp[
+                
+                Part[$CellContext`a$, 
+                 2]]}]; $CellContext`orderedpts$4786 = $CellContext`csort[
+              Map[$CellContext`exp$4786, $CellContext`pts$$]]; CreateWindow[
+             DialogNotebook[{"X coordinates:", 
+               InputField[
+                
+                Map[$CellContext`grabfirst$4786, \
+$CellContext`orderedpts$4786]], "Y coordinates:", 
+               InputField[
+                
+                Map[$CellContext`grabsecond$4786, \
+$CellContext`orderedpts$4786]], "Combined List:", 
+               InputField[$CellContext`orderedpts$4786]}]], ImageSize -> 
+           Large], 
+          Dynamic[
+           StringJoin[
+            ToString[
+             Length[$CellContext`pts$$]], " Points total"]]}, 
+         Spacer[10]]}, "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{1228., {256., 263.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.6049269193660517`*^9, 3.635184798568815*^9, {3.635184844486371*^9, 
+   3.6351848726503515`*^9}, 3.6356161467043*^9, 3.6356164634699736`*^9, 
+   3.635616533562786*^9}]
+}, Open  ]]
+},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (September 9, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 31405, 686, 1972, "Input"],
+Cell[31987, 710, 11600, 248, 536, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
